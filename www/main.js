@@ -57,6 +57,24 @@ NumberInput.prototype.formatNumber = function(number) {
   }
 }
 
+NumberInput.prototype.submitFormatNumber = function(number) {
+  if (number === '-') {
+    this.lastValue = ''
+    return ''
+  }
+  number = parseFloat(number)
+  if (this.max !== undefined && number>this.max) {
+    this.lastValue = this.max
+    return this.max
+  }
+  if (this.min !== undefined && number<this.min) {
+    this.lastValue = this.min
+    return this.min
+  }
+  this.lastValue = number
+  return number
+}
+
 var inputOne = new NumberInput({
   defaultValue: '',
   negative: true,
@@ -66,5 +84,10 @@ var inputOne = new NumberInput({
 })
 $('#input-1').on('input', function (e) {
   $('#input-1').val(inputOne.formatNumber(e.target.value))
+  console.log('input')
+})
+
+$('#input-1').on('blur', function (e) {
+  $('#input-1').val(inputOne.submitFormatNumber(inputOne.lastValue))
   console.log('input')
 })
